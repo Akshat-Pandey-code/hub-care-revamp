@@ -1,9 +1,10 @@
 
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LogIn, UserPlus } from "lucide-react";
 import SearchBar from "./SearchBar";
 import { cn } from "@/lib/utils";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -27,7 +28,20 @@ const Navbar = () => {
             <li><a href="#doctors" className="text-gray-800 hover:text-purple-600 font-medium">Doctors</a></li>
             <li><a href="#contact" className="text-gray-800 hover:text-purple-600 font-medium">Contact</a></li>
           </ul>
-          <Button className="bg-purple-600 hover:bg-purple-700">Book Appointment</Button>
+          <div className="flex items-center gap-3">
+            <Link to="/login">
+              <Button variant="outline" className="flex items-center gap-2">
+                <LogIn size={18} />
+                <span className="hidden sm:inline">Login</span>
+              </Button>
+            </Link>
+            <Link to="/register">
+              <Button className="bg-purple-600 hover:bg-purple-700 flex items-center gap-2">
+                <UserPlus size={18} />
+                <span className="hidden sm:inline">Register</span>
+              </Button>
+            </Link>
+          </div>
         </div>
 
         {/* Mobile Menu Button */}
@@ -53,7 +67,20 @@ const Navbar = () => {
             <li><a href="#doctors" className="block py-2 text-gray-800 hover:text-purple-600 font-medium">Doctors</a></li>
             <li><a href="#contact" className="block py-2 text-gray-800 hover:text-purple-600 font-medium">Contact</a></li>
           </ul>
-          <Button className="bg-purple-600 hover:bg-purple-700 w-full">Book Appointment</Button>
+          <div className="flex flex-col gap-3">
+            <Link to="/login">
+              <Button variant="outline" className="w-full flex items-center justify-center gap-2">
+                <LogIn size={18} />
+                Login
+              </Button>
+            </Link>
+            <Link to="/register">
+              <Button className="bg-purple-600 hover:bg-purple-700 w-full flex items-center justify-center gap-2">
+                <UserPlus size={18} />
+                Register
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
     </nav>

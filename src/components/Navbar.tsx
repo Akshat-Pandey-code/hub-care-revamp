@@ -1,7 +1,7 @@
 
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X, LogIn, UserPlus } from "lucide-react";
+import { Menu, X, LogIn, UserPlus, Calendar } from "lucide-react";
 import SearchBar from "./SearchBar";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
@@ -15,18 +15,18 @@ const Navbar = () => {
     <nav className="fixed top-0 w-full bg-white shadow-sm z-50">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         {/* Logo */}
-        <a href="/" className="flex items-center gap-2">
+        <Link to="/" className="flex items-center gap-2">
           <span className="text-2xl font-bold text-purple-700">HealHub</span>
-        </a>
+        </Link>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-8">
           <SearchBar />
           <ul className="flex items-center gap-6">
-            <li><a href="/" className="text-gray-800 hover:text-purple-600 font-medium">Home</a></li>
-            <li><a href="#services" className="text-gray-800 hover:text-purple-600 font-medium">Services</a></li>
-            <li><a href="#doctors" className="text-gray-800 hover:text-purple-600 font-medium">Doctors</a></li>
-            <li><a href="#contact" className="text-gray-800 hover:text-purple-600 font-medium">Contact</a></li>
+            <li><Link to="/" className="text-gray-800 hover:text-purple-600 font-medium">Home</Link></li>
+            <li><Link to="/services" className="text-gray-800 hover:text-purple-600 font-medium">Services</Link></li>
+            <li><Link to="/doctors" className="text-gray-800 hover:text-purple-600 font-medium">Doctors</Link></li>
+            <li><Link to="/appointments" className="text-gray-800 hover:text-purple-600 font-medium">Appointments</Link></li>
           </ul>
           <div className="flex items-center gap-3">
             <Link to="/login">
@@ -62,10 +62,10 @@ const Navbar = () => {
         <div className="container mx-auto px-4 flex flex-col gap-4">
           <SearchBar />
           <ul className="flex flex-col gap-4">
-            <li><a href="/" className="block py-2 text-gray-800 hover:text-purple-600 font-medium">Home</a></li>
-            <li><a href="#services" className="block py-2 text-gray-800 hover:text-purple-600 font-medium">Services</a></li>
-            <li><a href="#doctors" className="block py-2 text-gray-800 hover:text-purple-600 font-medium">Doctors</a></li>
-            <li><a href="#contact" className="block py-2 text-gray-800 hover:text-purple-600 font-medium">Contact</a></li>
+            <li><Link to="/" className="block py-2 text-gray-800 hover:text-purple-600 font-medium">Home</Link></li>
+            <li><Link to="/services" className="block py-2 text-gray-800 hover:text-purple-600 font-medium">Services</Link></li>
+            <li><Link to="/doctors" className="block py-2 text-gray-800 hover:text-purple-600 font-medium">Doctors</Link></li>
+            <li><Link to="/appointments" className="block py-2 text-gray-800 hover:text-purple-600 font-medium">Appointments</Link></li>
           </ul>
           <div className="flex flex-col gap-3">
             <Link to="/login">

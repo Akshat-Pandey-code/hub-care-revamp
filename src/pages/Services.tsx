@@ -3,44 +3,61 @@ import React from "react";
 import Layout from "@/components/Layout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar, HeartPulse, Stethoscope, Users, Brain, Baby } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/components/ui/use-toast";
 
 const Services = () => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  
   const services = [
     {
       id: 1,
       title: "Online Consultation",
       description: "Connect with our doctors remotely through secure video calls for non-emergency medical advice and treatment recommendations.",
-      icon: <Stethoscope className="h-12 w-12 text-purple-600" />
+      icon: <Stethoscope className="h-12 w-12 text-purple-600" />,
+      action: () => navigate("/appointments")
     },
     {
       id: 2,
       title: "Emergency Care",
       description: "24/7 emergency medical services with quick response times for critical situations requiring immediate attention.",
-      icon: <HeartPulse className="h-12 w-12 text-purple-600" />
+      icon: <HeartPulse className="h-12 w-12 text-purple-600" />,
+      action: () => {
+        toast({
+          title: "Emergency Contact",
+          description: "For emergencies, please call our hotline at 911 or visit our emergency center.",
+          variant: "destructive",
+        });
+      }
     },
     {
       id: 3,
       title: "Mental Health Support",
       description: "Comprehensive mental health services including therapy, counseling, and psychiatric care for various conditions.",
-      icon: <Brain className="h-12 w-12 text-purple-600" />
+      icon: <Brain className="h-12 w-12 text-purple-600" />,
+      action: () => navigate("/doctors?specialty=mental-health")
     },
     {
       id: 4,
       title: "Family Medicine",
       description: "Preventive care, routine check-ups, and treatment for the whole family, from infants to elderly patients.",
-      icon: <Users className="h-12 w-12 text-purple-600" />
+      icon: <Users className="h-12 w-12 text-purple-600" />,
+      action: () => navigate("/doctors?specialty=family-medicine")
     },
     {
       id: 5,
       title: "Pediatric Care",
       description: "Specialized healthcare for children, including regular check-ups, vaccinations, and treatment for childhood illnesses.",
-      icon: <Baby className="h-12 w-12 text-purple-600" />
+      icon: <Baby className="h-12 w-12 text-purple-600" />,
+      action: () => navigate("/doctors?specialty=pediatric")
     },
     {
       id: 6,
       title: "Health Screenings",
       description: "Comprehensive health assessments and screenings to detect potential health issues early for better treatment outcomes.",
-      icon: <Calendar className="h-12 w-12 text-purple-600" />
+      icon: <Calendar className="h-12 w-12 text-purple-600" />,
+      action: () => navigate("/appointments")
     }
   ];
 
@@ -63,7 +80,10 @@ const Services = () => {
                   </div>
                   <h3 className="text-xl font-semibold text-purple-700 mb-3">{service.title}</h3>
                   <p className="text-gray-600">{service.description}</p>
-                  <button className="mt-4 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium">
+                  <button 
+                    className="mt-4 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium"
+                    onClick={service.action}
+                  >
                     Learn More
                   </button>
                 </div>

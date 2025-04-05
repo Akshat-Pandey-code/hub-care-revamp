@@ -2,14 +2,39 @@
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/components/ui/use-toast";
 
 const SearchBar = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (searchQuery.trim() === "") {
+      return;
+    }
+    
+    // In a real application, this would search a database or API
+    // For now, we'll just simulate a search
+    toast({
+      title: "Search executed",
+      description: `You searched for: ${searchQuery}`,
+    });
+    
+    // Navigate to a search results page (would be implemented in a real app)
+    // For now, we'll just navigate to a relevant page based on the query
+    if (searchQuery.toLowerCase().includes("doctor")) {
+      navigate("/doctors");
+    } else if (searchQuery.toLowerCase().includes("service")) {
+      navigate("/services");
+    } else if (searchQuery.toLowerCase().includes("appointment")) {
+      navigate("/appointments");
+    }
+    
     console.log("Searching for:", searchQuery);
-    // Here you would typically handle the search functionality
   };
 
   return (

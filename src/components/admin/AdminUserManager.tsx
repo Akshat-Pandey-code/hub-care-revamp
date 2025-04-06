@@ -51,6 +51,11 @@ const AdminUserManager = () => {
         throw error;
       }
       
+      if (!data) {
+        setUsers([]);
+        return;
+      }
+      
       // Fetch auth data to get admin status
       const { data: authData, error: authError } = await supabase.auth.admin.listUsers();
       
@@ -60,7 +65,7 @@ const AdminUserManager = () => {
       
       // Combine the data
       const combinedUsers = data.map(profile => {
-        const authUser = authData.users.find(u => u.id === profile.id);
+        const authUser = authData?.users?.find(u => u.id === profile.id);
         return {
           id: profile.id,
           email: authUser?.email || '',

@@ -1,5 +1,1 @@
-
 project_id = "iipirfpxxaeynucdebix"
-
-[functions.admin-notification]
-verify_jwt = true

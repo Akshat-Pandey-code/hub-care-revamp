@@ -1,8 +1,6 @@
 
 import React from "react";
 import Navbar from "./Navbar";
-import Footer from "./Footer";
-import Logo from "./Logo";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -10,10 +8,14 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen bg-gray-50">
       <Navbar />
-      <main className="flex-grow">{children}</main>
-      <Footer />
+      <main>{children}</main>
+      <footer className="bg-purple-900 text-white py-8">
+        <div className="container mx-auto px-4 text-center">
+          <p>© 2025 HealHub. All rights reserved.</p>
+        </div>
+      </footer>
     </div>
   );
 };

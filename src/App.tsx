@@ -16,6 +16,7 @@ import PatientRecords from "./pages/admin/PatientRecords";
 import AdminAppointments from "./pages/admin/AdminAppointments";
 import StaffManagement from "./pages/admin/StaffManagement";
 import UserProfile from "./pages/UserProfile";
+import EmailVerification from "./pages/EmailVerification";
 import { AuthProvider } from "./contexts/AuthContext";
 
 const queryClient = new QueryClient();
@@ -35,6 +36,7 @@ const App = () => (
             <Route path="/services" element={<Services />} />
             <Route path="/appointments" element={<Appointments />} />
             <Route path="/profile" element={<UserProfile />} />
+            <Route path="/verify-email" element={<EmailVerification />} />
             
             {/* Admin Routes */}
             <Route path="/admin" element={<AdminDashboard />} />

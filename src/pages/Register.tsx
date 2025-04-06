@@ -70,7 +70,8 @@ const Register = () => {
     if (!error && authData?.user) {
       // Send notification to admin
       await sendAdminNotification(authData.user.id);
-      navigate('/verify-email');
+      // Skip email verification and redirect to home page
+      navigate('/');
     }
   };
 

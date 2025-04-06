@@ -1,58 +1,15 @@
 
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuLink, navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
 import Logo from "./Logo";
-import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/components/ui/use-toast";
+import NavLinks from "./navbar/NavLinks";
+import AuthButtons from "./navbar/AuthButtons";
+import MobileMenu from "./navbar/MobileMenu";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const navigate = useNavigate();
-  const { toast } = useToast();
-  const [user, setUser] = useState(null);
 
-  React.useEffect(() => {
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        if (session?.user) {
-          setUser(session.user);
-        } else {
-          setUser(null);
-        }
-      }
-    );
-
-    // Initial session check
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user) {
-        setUser(session.user);
-      }
-    });
-
-    return () => {
-      authListener.subscription.unsubscribe();
-    };
-  }, []);
-
-  const handleSignOut = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      toast({
-        title: "Error signing out",
-        description: error.message,
-        variant: "destructive",
-      });
-    } else {
-      toast({
-        title: "Signed out successfully",
-        description: "You have been signed out of your account",
-      });
-      navigate("/");
-    }
-  };
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (
     <header className="border-b bg-white sticky top-0 z-50">
@@ -63,151 +20,24 @@ const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-1">
-            <NavigationMenu>
-              <NavigationMenuList>
-                <NavigationMenuItem>
-                  <Link to="/">
-                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                      Home
-                    </NavigationMenuLink>
-                  </Link>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <Link to="/doctors">
-                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                      Doctors
-                    </NavigationMenuLink>
-                  </Link>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <Link to="/services">
-                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                      Services
-                    </NavigationMenuLink>
-                  </Link>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <Link to="/appointments">
-                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                      Appointments
-                    </NavigationMenuLink>
-                  </Link>
-                </NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu>
+            <NavLinks />
           </div>
 
           {/* User Authentication Buttons */}
           <div className="hidden md:flex items-center space-x-4">
-            {user ? (
-              <>
-                {user.user_metadata?.isAdmin && (
-                  <Button variant="outline" onClick={() => navigate("/admin")}>
-                    Admin Dashboard
-                  </Button>
-                )}
-                <Button variant="outline" onClick={() => navigate("/profile")}>
-                  My Profile
-                </Button>
-                <Button variant="outline" onClick={handleSignOut}>
-                  Sign Out
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button variant="outline" onClick={() => navigate("/login")}>
-                  Sign In
-                </Button>
-                <Button onClick={() => navigate("/register")}>Sign Up</Button>
-              </>
-            )}
+            <AuthButtons />
           </div>
 
           {/* Mobile Menu Button */}
           <div className="md:hidden">
-            <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            <button onClick={toggleMenu}>
               {isMenuOpen ? <X /> : <Menu />}
             </button>
           </div>
         </div>
 
         {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="md:hidden mt-4 pb-4">
-            <nav className="flex flex-col space-y-3">
-              <Link to="/" className="py-2 hover:text-purple-600" onClick={() => setIsMenuOpen(false)}>
-                Home
-              </Link>
-              <Link to="/doctors" className="py-2 hover:text-purple-600" onClick={() => setIsMenuOpen(false)}>
-                Doctors
-              </Link>
-              <Link to="/services" className="py-2 hover:text-purple-600" onClick={() => setIsMenuOpen(false)}>
-                Services
-              </Link>
-              <Link to="/appointments" className="py-2 hover:text-purple-600" onClick={() => setIsMenuOpen(false)}>
-                Appointments
-              </Link>
-              
-              <div className="pt-4 border-t">
-                {user ? (
-                  <>
-                    {user.user_metadata?.isAdmin && (
-                      <Button 
-                        variant="outline" 
-                        className="w-full mb-2" 
-                        onClick={() => {
-                          navigate("/admin");
-                          setIsMenuOpen(false);
-                        }}
-                      >
-                        Admin Dashboard
-                      </Button>
-                    )}
-                    <Button 
-                      variant="outline" 
-                      className="w-full mb-2" 
-                      onClick={() => {
-                        navigate("/profile");
-                        setIsMenuOpen(false);
-                      }}
-                    >
-                      My Profile
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      className="w-full" 
-                      onClick={handleSignOut}
-                    >
-                      Sign Out
-                    </Button>
-                  </>
-                ) : (
-                  <>
-                    <Button 
-                      variant="outline" 
-                      className="w-full mb-2" 
-                      onClick={() => {
-                        navigate("/login");
-                        setIsMenuOpen(false);
-                      }}
-                    >
-                      Sign In
-                    </Button>
-                    <Button 
-                      className="w-full" 
-                      onClick={() => {
-                        navigate("/register");
-                        setIsMenuOpen(false);
-                      }}
-                    >
-                      Sign Up
-                    </Button>
-                  </>
-                )}
-              </div>
-            </nav>
-          </div>
-        )}
+        <MobileMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       </div>
     </header>
   );

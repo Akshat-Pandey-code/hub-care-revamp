@@ -5,53 +5,16 @@ import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuLink, navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
 import Logo from "./Logo";
-import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/components/ui/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const { toast } = useToast();
-  const [user, setUser] = useState(null);
-
-  React.useEffect(() => {
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        if (session?.user) {
-          setUser(session.user);
-        } else {
-          setUser(null);
-        }
-      }
-    );
-
-    // Initial session check
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user) {
-        setUser(session.user);
-      }
-    });
-
-    return () => {
-      authListener.subscription.unsubscribe();
-    };
-  }, []);
+  const { user, isAdmin, signOut } = useAuth();
 
   const handleSignOut = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      toast({
-        title: "Error signing out",
-        description: error.message,
-        variant: "destructive",
-      });
-    } else {
-      toast({
-        title: "Signed out successfully",
-        description: "You have been signed out of your account",
-      });
-      navigate("/");
-    }
+    await signOut();
+    navigate("/");
   };
 
   return (
@@ -101,7 +64,7 @@ const Navbar = () => {
           <div className="hidden md:flex items-center space-x-4">
             {user ? (
               <>
-                {user.user_metadata?.isAdmin && (
+                {isAdmin && (
                   <Button variant="outline" onClick={() => navigate("/admin")}>
                     Admin Dashboard
                   </Button>
@@ -151,7 +114,7 @@ const Navbar = () => {
               <div className="pt-4 border-t">
                 {user ? (
                   <>
-                    {user.user_metadata?.isAdmin && (
+                    {isAdmin && (
                       <Button 
                         variant="outline" 
                         className="w-full mb-2" 

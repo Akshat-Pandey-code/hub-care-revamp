@@ -17,36 +17,39 @@ import AdminAppointments from "./pages/admin/AdminAppointments";
 import StaffManagement from "./pages/admin/StaffManagement";
 import UserProfile from "./pages/UserProfile";
 import EmailVerification from "./pages/EmailVerification";
+import { AuthProvider } from "./contexts/AuthContext";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/doctors" element={<Doctors />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/appointments" element={<Appointments />} />
-          <Route path="/profile" element={<UserProfile />} />
-          <Route path="/verify-email" element={<EmailVerification />} />
-          
-          {/* Admin Routes */}
-          <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/admin/patients" element={<PatientRecords />} />
-          <Route path="/admin/appointments" element={<AdminAppointments />} />
-          <Route path="/admin/staff" element={<StaffManagement />} />
-          
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+    <AuthProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/doctors" element={<Doctors />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/appointments" element={<Appointments />} />
+            <Route path="/profile" element={<UserProfile />} />
+            <Route path="/verify-email" element={<EmailVerification />} />
+            
+            {/* Admin Routes */}
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/patients" element={<PatientRecords />} />
+            <Route path="/admin/appointments" element={<AdminAppointments />} />
+            <Route path="/admin/staff" element={<StaffManagement />} />
+            
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </AuthProvider>
   </QueryClientProvider>
 );
 

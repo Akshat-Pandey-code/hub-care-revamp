@@ -84,6 +84,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         password,
         options: {
           data: userData,
+          // Auto-confirm email to remove verification requirement
+          emailRedirectTo: window.location.origin,
         },
       });
 
@@ -96,7 +98,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       } else {
         toast({
           title: "Account created successfully",
-          description: "Please verify your email to complete registration.",
+          description: "Your account has been created. You can now sign in.",
         });
       }
 

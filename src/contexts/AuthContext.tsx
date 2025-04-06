@@ -13,7 +13,6 @@ interface AuthContextType {
   signUp: (email: string, password: string, userData: any) => Promise<{ error: any; data: any }>;
   signOut: () => Promise<void>;
   updateProfile: (data: any) => Promise<{ error: any; data: any }>;
-  setAdminStatus: (userId: string, isAdmin: boolean) => Promise<{ error: any; data: any }>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -85,8 +84,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         password,
         options: {
           data: userData,
-          // Auto-confirm email to remove verification requirement
-          emailRedirectTo: window.location.origin,
         },
       });
 
@@ -99,7 +96,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       } else {
         toast({
           title: "Account created successfully",
-          description: "Your account has been created. You can now sign in.",
+          description: "Please verify your email to complete registration.",
         });
       }
 
@@ -163,38 +160,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  // New function to set admin status
-  const setAdminStatus = async (userId: string, isAdmin: boolean) => {
-    try {
-      const { data: updateData, error } = await supabase.auth.admin.updateUserById(
-        userId,
-        { user_metadata: { isAdmin } }
-      );
-
-      if (error) {
-        toast({
-          title: "Admin status update failed",
-          description: error.message,
-          variant: "destructive",
-        });
-      } else {
-        toast({
-          title: "Admin status updated",
-          description: `User ${isAdmin ? 'is now an admin' : 'is no longer an admin'}`,
-        });
-      }
-
-      return { data: updateData, error };
-    } catch (error: any) {
-      toast({
-        title: "Admin status update failed",
-        description: error.message,
-        variant: "destructive",
-      });
-      return { data: null, error };
-    }
-  };
-
   return (
     <AuthContext.Provider
       value={{
@@ -206,7 +171,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         signUp,
         signOut,
         updateProfile,
-        setAdminStatus,
       }}
     >
       {children}

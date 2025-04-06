@@ -1,42 +1,26 @@
 
 import React from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { TrendingUp, TrendingDown } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-interface StatsCardProps {
+export interface StatsCardProps {
   title: string;
   value: string;
-  trend: string;
-  trendType: "up" | "down";
   icon: React.ReactNode;
+  description?: React.ReactNode;
 }
 
-const StatsCard = ({ title, value, trend, trendType, icon }: StatsCardProps) => {
+const StatsCard = ({ title, value, icon, description }: StatsCardProps) => {
   return (
     <Card>
-      <CardContent className="p-6">
-        <div className="flex justify-between items-start">
-          <div>
-            <p className="text-sm font-medium text-gray-500">{title}</p>
-            <h3 className="text-2xl font-bold mt-1">{value}</h3>
-          </div>
-          <div className="p-2 rounded-full bg-gray-50">{icon}</div>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardTitle className="text-sm font-medium">{title}</CardTitle>
+        <div className="h-8 w-8 rounded-full bg-purple-100 p-1.5 text-purple-700">
+          {icon}
         </div>
-        <div className="mt-2 flex items-center">
-          {trendType === "up" ? (
-            <TrendingUp className="h-4 w-4 text-green-500 mr-1" />
-          ) : (
-            <TrendingDown className="h-4 w-4 text-red-500 mr-1" />
-          )}
-          <span 
-            className={`text-sm font-medium ${
-              trendType === "up" ? "text-green-500" : "text-red-500"
-            }`}
-          >
-            {trend}
-          </span>
-          <span className="text-xs text-gray-500 ml-1">vs last month</span>
-        </div>
+      </CardHeader>
+      <CardContent>
+        <div className="text-2xl font-bold">{value}</div>
+        {description && <p className="text-xs text-muted-foreground mt-1">{description}</p>}
       </CardContent>
     </Card>
   );

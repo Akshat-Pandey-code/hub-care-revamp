@@ -25,7 +25,16 @@ import {
 } from "@/components/ui/dialog";
 import { useToast } from "@/components/ui/use-toast";
 import { Edit, Trash2, Plus, Save, X, Image as ImageIcon } from "lucide-react";
-import { Doctor, DoctorInsert } from "@/types/supabase";
+
+interface Doctor {
+  id: string;
+  name: string;
+  specialty: string;
+  qualification: string;
+  experience: number;
+  bio: string;
+  image_url: string;
+}
 
 const DoctorsManagement = () => {
   const { toast } = useToast();
@@ -34,7 +43,7 @@ const DoctorsManagement = () => {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
-  const [newDoctor, setNewDoctor] = useState<DoctorInsert>({
+  const [newDoctor, setNewDoctor] = useState<Partial<Doctor>>({
     name: "",
     specialty: "",
     qualification: "",
@@ -68,7 +77,7 @@ const DoctorsManagement = () => {
 
   // Mutation to add a doctor
   const addDoctorMutation = useMutation({
-    mutationFn: async (newDoctor: DoctorInsert) => {
+    mutationFn: async (newDoctor: Partial<Doctor>) => {
       // Upload image if provided
       let imageUrl = newDoctor.image_url;
       if (imageFile) {
@@ -99,19 +108,9 @@ const DoctorsManagement = () => {
         imageUrl = urlData.publicUrl;
       }
       
-      // Make sure required fields are not undefined or null
-      const doctorToInsert: DoctorInsert = {
-        name: newDoctor.name || "",
-        specialty: newDoctor.specialty || "",
-        qualification: newDoctor.qualification || "",
-        experience: newDoctor.experience || 0,
-        bio: newDoctor.bio,
-        image_url: imageUrl,
-      };
-      
       const { data, error } = await supabase
         .from('doctors')
-        .insert(doctorToInsert)
+        .insert([{ ...newDoctor, image_url: imageUrl }])
         .select();
         
       if (error) throw error;
@@ -400,7 +399,7 @@ const DoctorsManagement = () => {
               </Label>
               <Textarea
                 id="bio"
-                value={newDoctor.bio || ""}
+                value={newDoctor.bio}
                 onChange={(e) => setNewDoctor({ ...newDoctor, bio: e.target.value })}
                 className="col-span-3"
               />
